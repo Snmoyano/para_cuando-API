@@ -1,0 +1,87 @@
+'use strict'
+const { Model } = require('sequelize')
+module.exports = (sequelize, DataTypes) => {
+  class Publications extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+      Publications.belongsToMany(models.Votes, {
+        as: 'publication',
+        through: models.Votes,
+        uniqueKey: false,
+      })
+      Publications.hasMany(models.Profiles, { foreignKey: 'profile_id' })
+      Publications.hasMany(models.Publications_types, {
+        foreignKey: 'id',
+      })
+      Publications.hasMany(models.Cities, { foreignKey: 'city_id' })
+    }
+  }
+  Publications.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        primaryKey: true,
+        allowNull: false,
+        defaultValue: DataTypes.UUIDV4,
+      },
+      profile_id: {
+        type: DataTypes.UUID,
+        foreignKey: true,
+        references: {
+          model: 'profiles',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      publication_type_id: {
+        type: DataTypes.INTEGER,
+        foreignKey: true,
+        references: {
+          model: 'publications_types',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      title: {
+        type: DataTypes.STRING,
+      },
+      description: {
+        type: DataTypes.STRING,
+      },
+      content: {
+        type: DataTypes.TEXT,
+      },
+      picture: {
+        type: DataTypes.STRING,
+      },
+      city_id: {
+        type: DataTypes.INTEGER,
+        foreignKey: true,
+        references: {
+          model: 'cities',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      image_url: {
+        type: DataTypes.STRING,
+      },
+    },
+    {
+      sequelize,
+      modelName: 'Publications',
+      tableName: 'publications',
+      underscored: true,
+      timestamps: true,
+    }
+  )
+  return Publications
+}
