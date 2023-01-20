@@ -8,6 +8,15 @@ class VotesService {
   async findAndCount(query) {
     const options = {
       where: {},
+      attributes: {
+        exclude: [
+          'VoteId',
+          'ProfileId',
+          'PublicationId',
+          'created_at',
+          'updated_at',
+        ],
+      },
     }
 
     const { limit, offset } = query
@@ -28,12 +37,13 @@ class VotesService {
     return votes
   }
 
-  async createVote({ name }) {
+  async createVote({ publication_id, profile_id }) {
     const transaction = await models.sequelize.transaction()
     try {
       let newVote = await models.Votes.create(
         {
-          name,
+          publication_id,
+          profile_id,
         },
         { transaction }
       )

@@ -8,6 +8,9 @@ class StatesService {
   async findAndCount(query) {
     const options = {
       where: {},
+      attributes: {
+        exclude: ['updated_at', 'created_at'],
+      },
     }
 
     const { limit, offset } = query
@@ -28,12 +31,14 @@ class StatesService {
     return states
   }
 
-  async createState({ name }) {
+  async createState({ name, country_id, city_id }) {
     const transaction = await models.sequelize.transaction()
     try {
       let newState = await models.State.create(
         {
           name,
+          country_id,
+          city_id,
         },
         { transaction }
       )
@@ -60,7 +65,7 @@ class StatesService {
     return state
   }
 
-  async updateState(id, { name }) {
+  async updateState(id, { name, country_id, city_id }) {
     const transaction = await models.sequelize.transaction()
     try {
       let state = await models.State.findByPk(id)
@@ -70,6 +75,8 @@ class StatesService {
       let updatedState = await state.update(
         {
           name,
+          country_id,
+          city_id,
         },
         { transaction }
       )

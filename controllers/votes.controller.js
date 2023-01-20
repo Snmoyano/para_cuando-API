@@ -26,7 +26,15 @@ const addVote = async (request, response, next) => {
     let vote = await votesService.createVote(body)
     return response.status(201).json({ results: vote })
   } catch (error) {
-    next(error)
+    next(
+      response.status(400).json({
+        message: error.message,
+        fields: {
+          publication_id: 'String',
+          profile_id: 'String',
+        },
+      })
+    )
   }
 }
 

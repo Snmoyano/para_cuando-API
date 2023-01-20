@@ -8,6 +8,9 @@ class PublicationsService {
   async findAndCount(query) {
     const options = {
       where: {},
+      attributes: {
+        exclude: ['updated_at', 'created_at'],
+      },
     }
 
     const { limit, offset } = query
@@ -28,12 +31,28 @@ class PublicationsService {
     return publications
   }
 
-  async createPublication({ name }) {
+  async createPublication({
+    profile_id,
+    publication_type_id,
+    title,
+    description,
+    content,
+    picture,
+    city_id,
+    image_url,
+  }) {
     const transaction = await models.sequelize.transaction()
     try {
       let newPublication = await models.Publications.create(
         {
-          name,
+          profile_id,
+          publication_type_id,
+          title,
+          description,
+          content,
+          picture,
+          city_id,
+          image_url,
         },
         { transaction }
       )

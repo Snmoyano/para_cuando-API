@@ -26,7 +26,16 @@ const addState = async (request, response, next) => {
     let state = await statesService.createState(body)
     return response.status(201).json({ results: state })
   } catch (error) {
-    next(error)
+    next(
+      response.status(400).json({
+        message: error.message,
+        fields: {
+          name: 'String',
+          country_id: 'String',
+          city_id: 'String',
+        },
+      })
+    )
   }
 }
 

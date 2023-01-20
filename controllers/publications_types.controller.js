@@ -28,7 +28,15 @@ const addPublicationType = async (request, response, next) => {
     )
     return response.status(201).json({ results: publicationType })
   } catch (error) {
-    next(error)
+    next(
+      response.status(400).json({
+        message: error.message,
+        fields: {
+          name: 'String',
+          description: 'String',
+        },
+      })
+    )
   }
 }
 

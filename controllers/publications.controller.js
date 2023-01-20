@@ -26,7 +26,21 @@ const addPublication = async (request, response, next) => {
     let publication = await publicationsService.createPublication(body)
     return response.status(201).json({ results: publication })
   } catch (error) {
-    next(error)
+    next(
+      response.status(400).json({
+        message: error.message,
+        fields: {
+          profile_id: 'String',
+          publication_type_id: 'String',
+          title: 'String',
+          description: 'String',
+          content: 'String',
+          picture: 'String',
+          city_id: 'String',
+          image_url: 'String',
+        },
+      })
+    )
   }
 }
 

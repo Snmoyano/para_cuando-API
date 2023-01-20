@@ -8,6 +8,9 @@ class PublicationsTypesService {
   async findAndCount(query) {
     const options = {
       where: {},
+      attributes: {
+        exclude: ['updated_at', 'created_at'],
+      },
     }
 
     const { limit, offset } = query
@@ -30,12 +33,13 @@ class PublicationsTypesService {
     return publicationsTypes
   }
 
-  async createPublicationType({ name }) {
+  async createPublicationType({ name, description }) {
     const transaction = await models.sequelize.transaction()
     try {
       let newPublicationType = await models.Publications_types.create(
         {
           name,
+          description,
         },
         { transaction }
       )
@@ -65,7 +69,7 @@ class PublicationsTypesService {
     return publicationType
   }
 
-  async updatePublicationType(id, { name }) {
+  async updatePublicationType(id, { name, description }) {
     const transaction = await models.sequelize.transaction()
     try {
       let publicationType = await models.Publications_types.findByPk(id)
@@ -76,6 +80,7 @@ class PublicationsTypesService {
       let updatedPublicationType = await publicationType.update(
         {
           name,
+          description,
         },
         { transaction }
       )

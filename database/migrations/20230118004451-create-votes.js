@@ -14,26 +14,28 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.BIGINT, // Puede ser Integer o BigInt -> BigInt es mejor
           },
-          // publication_id: {
-          //   type: Sequelize.UUID,
-          //   foreignKey: true,
-          //   references: {
-          //     model: 'publications',
-          //     key: 'id',
-          //   },
-          //   onUpdate: 'CASCADE',
-          //   onDelete: 'CASCADE',
-          // },
-          // profile_id: {
-          //   type: Sequelize.UUID,
-          //   foreignKey: true,
-          //   references: {
-          //     model: 'profiles',
-          //     key: 'id',
-          //   },
-          //   onUpdate: 'CASCADE',
-          //   onDelete: 'CASCADE',
-          // },
+          publication_id: {
+            type: Sequelize.UUID,
+            allowNull: false,
+            foreignKey: true,
+            references: {
+              model: 'publications',
+              key: 'id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
+          },
+          profile_id: {
+            type: Sequelize.UUID,
+            foreignKey: true,
+            allowNull: false,
+            references: {
+              model: 'profiles',
+              key: 'id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
+          },
           createdAt: {
             allowNull: false,
             type: Sequelize.DATE,

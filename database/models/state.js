@@ -21,8 +21,14 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
       country_id: {
         type: DataTypes.INTEGER,
+        allowNull: false,
         foreignKey: true,
         references: {
           model: 'countries',
@@ -33,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       city_id: {
         type: DataTypes.INTEGER,
+        allowNull: false,
         foreignKey: true,
         references: {
           model: 'cities',

@@ -16,6 +16,7 @@ module.exports = {
           profile_id: {
             type: Sequelize.UUID,
             foreignKey: true,
+            allowNull: false,
             references: {
               model: 'profiles',
               key: 'id',
@@ -26,6 +27,7 @@ module.exports = {
           publication_type_id: {
             type: Sequelize.INTEGER,
             foreignKey: true,
+            allowNull: false,
             references: {
               model: 'publications_types',
               key: 'id',
@@ -35,18 +37,24 @@ module.exports = {
           },
           title: {
             type: Sequelize.STRING,
+            allowNull: false,
           },
           description: {
             type: Sequelize.STRING,
+            allowNull: false,
           },
+
           content: {
             type: Sequelize.TEXT,
+            allowNull: false,
           },
           picture: {
             type: Sequelize.STRING,
+            allowNull: false,
           },
           city_id: {
             type: Sequelize.INTEGER,
+            allowNull: false,
             foreignKey: true,
             references: {
               model: 'cities',
@@ -57,6 +65,7 @@ module.exports = {
           },
           image_url: {
             type: Sequelize.STRING,
+            allowNull: false,
           },
           createdAt: {
             allowNull: false,

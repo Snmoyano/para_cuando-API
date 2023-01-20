@@ -28,7 +28,18 @@ const addUser = async (request, response, next) => {
       return response.status(201).json({ results: user })
     }
   } catch (error) {
-    next(error)
+    next(
+      response.status(400).json({
+        message: error.message,
+        fields: {
+          first_name: 'String',
+          last_name: 'String',
+          email: 'example@example.com',
+          username: 'String',
+          password: 'String',
+        },
+      })
+    )
   }
 }
 

@@ -8,6 +8,9 @@ class UsersService {
   async findAndCount(query) {
     const options = {
       where: {},
+      attributes: {
+        exclude: ['updated_at', 'created_at'],
+      },
     }
 
     const { limit, offset } = query
@@ -30,6 +33,7 @@ class UsersService {
 
   async createUser({ first_name, last_name, email, username, password }) {
     const transaction = await models.sequelize.transaction()
+
     try {
       let newUser = await models.Users.create(
         {
@@ -66,6 +70,7 @@ class UsersService {
 
   async updateUser(id, { first_name, last_name, email, username }) {
     const transaction = await models.sequelize.transaction()
+
     try {
       let user = await models.Users.findByPk(id)
 

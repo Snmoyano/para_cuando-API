@@ -26,7 +26,14 @@ const addRol = async (request, response, next) => {
     let rol = await rolesService.createRol(body)
     return response.status(201).json({ results: rol })
   } catch (error) {
-    next(error)
+    next(
+      response.status(400).json({
+        message: error.message,
+        fields: {
+          name: 'String',
+        },
+      })
+    )
   }
 }
 

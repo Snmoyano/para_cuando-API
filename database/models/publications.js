@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       profile_id: {
         type: DataTypes.UUID,
+        allowNull: false,
         foreignKey: true,
         references: {
           model: 'profiles',
@@ -41,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       publication_type_id: {
         type: DataTypes.INTEGER,
+        allowNull: false,
         foreignKey: true,
         references: {
           model: 'publications_types',
@@ -51,18 +53,23 @@ module.exports = (sequelize, DataTypes) => {
       },
       title: {
         type: DataTypes.STRING,
+        allowNull: false,
       },
       description: {
         type: DataTypes.STRING,
+        allowNull: false,
       },
       content: {
         type: DataTypes.TEXT,
+        allowNull: false,
       },
       picture: {
         type: DataTypes.STRING,
+        allowNull: false,
       },
       city_id: {
         type: DataTypes.INTEGER,
+        allowNull: false,
         foreignKey: true,
         references: {
           model: 'cities',
@@ -73,6 +80,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       image_url: {
         type: DataTypes.STRING,
+        allowNull: false,
       },
     },
     {

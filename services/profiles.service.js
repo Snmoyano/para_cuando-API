@@ -8,6 +8,9 @@ class ProfilesService {
   async findAndCount(query) {
     const options = {
       where: {},
+      attributes: {
+        exclude: ['updated_at', 'created_at', 'profile_id'],
+      },
     }
 
     const { limit, offset } = query
@@ -28,12 +31,24 @@ class ProfilesService {
     return profiles
   }
 
-  async createProfile({ name }) {
+  async createProfile({
+    user_id,
+    role_id,
+    image_url,
+    code_phone,
+    phone,
+    country_id,
+  }) {
     const transaction = await models.sequelize.transaction()
     try {
       let newProfile = await models.Profiles.create(
         {
-          name,
+          user_id,
+          role_id,
+          image_url,
+          code_phone,
+          phone,
+          country_id,
         },
         { transaction }
       )
@@ -60,7 +75,10 @@ class ProfilesService {
     return profile
   }
 
-  async updateProfile(id, { name }) {
+  async updateProfile(
+    id,
+    { user_id, role_id, image_url, code_phone, phone, country_id }
+  ) {
     const transaction = await models.sequelize.transaction()
     try {
       let profile = await models.Profiles.findByPk(id)
@@ -69,7 +87,12 @@ class ProfilesService {
 
       let updatedProfile = await profile.update(
         {
-          name,
+          user_id,
+          role_id,
+          image_url,
+          code_phone,
+          phone,
+          country_id,
         },
         { transaction }
       )
