@@ -49,19 +49,7 @@ Routes
 app.use('/api/v1/auth', authRouter)
 
 //
-db.sequelize
-  .authenticate()
-  .then(() => console.log('Database Authenticated'))
-  .catch((err) => console.log(err))
 
-db.sequelize
-  .sync({}) //force: true
-  .then((e) => {
-    console.log(e)
-  })
-  .catch((e) => {
-    console.log(e)
-  })
 /* 
     Tell everyone the state of your api
 */
