@@ -14,7 +14,7 @@ const postLogin = (req, res) => {
             id: data.id ,
             email: data.email ,
             username: data.username 
-          } , key , {expiresIn: '1h'})
+          } , key , {expiresIn: '2h'})
           res.status(200).json({
             message: 'Right credentials' ,
             token
