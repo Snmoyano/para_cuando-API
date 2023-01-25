@@ -1,7 +1,7 @@
 const models = require('../database/models')
 const { Op } = require('sequelize')
 const { CustomError } = require('../utils/custom-error')
-
+const { hashPassword } = require('../utils/crypto')
 class UsersService {
   constructor() {}
 
@@ -41,7 +41,7 @@ class UsersService {
           last_name,
           email,
           username,
-          password,
+          password: hashPassword(password),
         },
         { transaction }
       )
@@ -111,6 +111,13 @@ class UsersService {
       await transaction.rollback()
       throw error
     }
+  }
+  async findUserByEmail(email) {
+    return await models.Users.findOne({
+      where: {
+        email,
+      },
+    })
   }
 }
 

@@ -6,7 +6,9 @@ const routerModels = require('./routes/models.router')
 const db = require('./database/models')
 const app = express()
 const PORT = process.env.PORT || 8000
+const authRouter = require('./routes/auth.routes')
 
+///arriba
 /*
 Cors Settings
 */
@@ -40,7 +42,18 @@ app.use(express.urlencoded({ extended: true }))
 
 /*
 Routes
+
 */
+//
+
+app.use('/api/v1/auth', authRouter)
+
+//
+db.sequelize
+  .authenticate()
+  .then(() => console.log('Database Authenticated'))
+  .catch((err) => console.log(err))
+
 db.sequelize
   .sync({}) //force: true
   .then((e) => {
