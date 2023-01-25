@@ -40,15 +40,6 @@ app.use(express.urlencoded({ extended: true }))
 
 /*
 Routes
-*/
-db.sequelize
-  .sync({}) //force: true
-  .then((e) => {
-    console.log(e)
-  })
-  .catch((e) => {
-    console.log(e)
-  })
 /* 
     Tell everyone the state of your api
 */

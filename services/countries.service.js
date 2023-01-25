@@ -57,7 +57,7 @@ class CountriesService {
     return country
   }
 
-  //Return not an Instance raw:true | we also can converted to Json instead
+  //Return not an Instance raw:true | we also can convert it to Json instead
   async getCountry(id) {
     let country = await models.Countries.findByPk(id, { raw: true })
     return country
@@ -102,6 +102,15 @@ class CountriesService {
       await transaction.rollback()
       throw error
     }
+  }
+
+  // For seeders <----------------------------- 
+  async findCountryByName(name) {
+    return await models.Countries.findOne({
+      where: {
+        name
+      }
+    })
   }
 }
 

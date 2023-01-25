@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      State.hasMany(models.Countries, { foreignKey: 'country_id' })
+      State.belongsTo(models.Countries, { foreignKey: 'country_id' })
       State.hasMany(models.Cities, { foreignKey: 'city_id' })
     }
   }
@@ -36,18 +36,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
-      },
-      city_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        foreignKey: true,
-        references: {
-          model: 'cities',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      },
+      }
     },
     {
       sequelize,

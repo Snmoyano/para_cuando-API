@@ -27,6 +27,9 @@ module.exports = {
             type: Sequelize.STRING,
             unique: true,
             allowNull: false,
+            validate: {
+              isEmail: true
+            }
           },
           username: {
             type: Sequelize.STRING,
@@ -48,11 +51,13 @@ module.exports = {
             type: Sequelize.DATE,
             field: 'created_at', // --> Asegurense de establecer el campo en snake_case aquí
             // o usando created_at en vez de createdAt en el Key
+            defaultValue: new Date()
           },
           updatedAt: {
             allowNull: false,
             type: Sequelize.DATE,
             field: 'updated_at',
+            defaultValue: new Date()
           },
         },
         { transaction }

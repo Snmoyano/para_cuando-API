@@ -28,25 +28,17 @@ module.exports = {
             onUpdate: 'CASCADE',
             onDelete: 'CASCADE',
           },
-          city_id: {
-            type: Sequelize.INTEGER,
-            foreignKey: true,
-            references: {
-              model: 'cities',
-              key: 'id',
-            },
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
-          },
           createdAt: {
             allowNull: false,
             type: Sequelize.DATE,
             field: 'created_at',
+            defaultValue: new Date()
           },
           updatedAt: {
             allowNull: false,
             type: Sequelize.DATE,
             field: 'updated_at',
+            defaultValue: new Date()
           },
         },
         { transaction }

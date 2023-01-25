@@ -13,12 +13,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'id',
         // targetKey: 'country_id',
       })
-      Countries.belongsTo(models.Cities, {
+      Countries.hasMany(models.Cities, {
         foreignKey: 'id',
         // targetKey: 'country_id',
       })
 
-      Countries.belongsTo(models.State, {
+      Countries.hasMany(models.State, {
         foreignKey: 'id',
         // targetKey: 'country_id',
       })
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       name: {
         type: DataTypes.STRING,
-      },
+      }
     },
     {
       sequelize,

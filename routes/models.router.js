@@ -1,4 +1,5 @@
 const express = require('express')
+const routesAuth = require('./auth.routes')
 const routesUsers = require('./users.routes')
 const routesRoles = require('./roles.routes')
 const routesCountries = require('./countries.routes')
@@ -14,6 +15,7 @@ function routerModels(app) {
 
   app.use('/api/v1', router)
 
+  router.use('/auth' , routesAuth)
   router.use('/users', routesUsers)
   router.use('/roles', routesRoles)
   router.use('/countries', routesCountries)

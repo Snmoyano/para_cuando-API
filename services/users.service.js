@@ -112,6 +112,15 @@ class UsersService {
       throw error
     }
   }
+
+  // For Auth <---------------
+  async findUserByEmail(email) {
+    return await models.Users.findOne({
+      where: {
+        email
+      }
+    })
+  }
 }
 
 module.exports = UsersService
