@@ -107,6 +107,15 @@ class StatesService {
       throw error
     }
   }
+
+  // For seeders <-------------
+  async findStateByName(name) {
+    return await models.States.findOne({
+      where: {
+        name
+      }
+    })
+  }
 }
 
 module.exports = StatesService
