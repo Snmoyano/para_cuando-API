@@ -11,8 +11,10 @@ const {
 
 router.get('/', getUsers)
 router.post('/', addUser)
-router.get('/:id', getUser)
-router.put('/:id', updateUser)
+router.get('/:user_id', getUser)
+router.get('/:user_id/votes', getUser)
+router.get('/:user_id/publications', getUser)
+router.put('/:user_id', updateUser)
 router.delete('/:id', removeUser)
 
 module.exports = router
