@@ -119,6 +119,23 @@ class UsersService {
       },
     })
   }
+
+  // For seeders <-----------
+  async findUserByUserName(username) {
+    return await models.Users.findOne({
+      where: {
+        username
+      }
+    })
+  }
+
+  async findUsersByLastName(last_name) {
+    return await models.Users.findAll({
+      where: {
+        last_name
+      }
+    })
+  }
 }
 
 module.exports = UsersService
