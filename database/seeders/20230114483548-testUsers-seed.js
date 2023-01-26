@@ -42,7 +42,7 @@ module.exports = {
       }
 
       await queryInterface.bulkDelete('users' , {
-        user_name: {
+        username: {
           [Op.or] : userNames
         }
       }, {transaction})

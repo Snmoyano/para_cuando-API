@@ -39,7 +39,7 @@ module.exports = {
       {
         id: uuid.v4(), // Waiting for Nicolás <--------------
         first_name: 'Nicolás' ,
-        last_name: 'Samoyano' ,
+        last_name: 'Moyano' ,
         email: 'pending3@gmail.com' ,
         username: 'pendingAdmin3' ,
         password: hashPassword('root') ,
@@ -73,7 +73,7 @@ module.exports = {
 
     try {
       await queryInterface.bulkDelete('users' , {
-        user_name: {
+        username: {
           [Op.or]: userNames
         }
       } , {transaction})

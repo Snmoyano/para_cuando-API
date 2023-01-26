@@ -1,7 +1,7 @@
 'use strict'
 require('dotenv').config()
 module.exports = {
-  api: { jwtSecret: 'JWT_SECRET' },
+  api: { jwtSecret: process.env.JWT_SECRET },
   development: {
     use_env_variable: 'DATABASE_URI_DEV',
     define: {
