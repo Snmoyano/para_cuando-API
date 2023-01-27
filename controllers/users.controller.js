@@ -53,13 +53,19 @@ const addUser = async (request, response, next) => {
 }
 
 const getUser = async (request, response, next) => {
-  try {
-    let { id } = request.params
-    let users = await usersService.getUserOr404(id)
-    return response.json({ results: users })
-  } catch (error) {
-    next(error)
-  }
+  const id  = request.params.user_id
+  
+  usersService.getUser(id)
+    .then(data => {
+      if (data) {
+        response.status(200).json(data)
+      } else {
+        response.status(404).json({message: 'Invalid ID'})
+      }
+    })
+    .catch(err => {
+      next(err)
+    })
 }
 
 const updateUser = async (request, response, next) => {

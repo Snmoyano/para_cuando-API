@@ -2,7 +2,8 @@ const uuid = require('uuid')
 
 const models = require('../database/models')
 const { Op } = require('sequelize')
-const { CustomError } = require('../utils/custom-error')
+const classError = require('../utils/custom-error')
+const CustomError = new classError()
 const { hashPassword } = require('../utils/crypto')
 
 const rolesServices = require('../services/roles.service')
@@ -67,19 +68,14 @@ class UsersService {
       throw error
     }
   }
-  //Return Instance if we do not converted to json (or raw:true)
-  async getUserOr404(id) {
-    let user = await models.Users.findByPk(id)
-
-    if (!user) throw new CustomError('Not found User', 404, 'Not Found')
-
-    return user
-  }
 
   //Return not an Instance raw:true | we also can converted to Json instead
   async getUser(id) {
-    let user = await models.Users.findByPk(id, { raw: true })
-    return user
+    return await models.Users.findOne({
+      where: {
+        id
+      }
+    })
   }
 
   async updateUser(id, { first_name, last_name, email, username }) {
