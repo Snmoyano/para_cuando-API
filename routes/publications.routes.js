@@ -11,8 +11,9 @@ const {
 
 const { addVote } = require('../controllers/votes.controller')
 
-router.get('/', getPublications)
-router.post('/', addPublication)
+router.get('/publications', getPublications)
+
+router.post('/publications', addPublication)
 router.get('/:publication_id', getPublication)
 router.post('/:publication_id/vote', addVote)
 // router.put('/:id', updatePublication)

@@ -26,6 +26,12 @@ router
   .post(addUser)
 router.post('/', addUser)
 router.get('/:user_id', getUser)
+
+   
+
+router.get('/users', getUser)
+
+
 router.get('/:user_id/votes', getVotes)
 router.get('/:user_id/publications', getPublications)
 router.put('/:user_id', updateUser)

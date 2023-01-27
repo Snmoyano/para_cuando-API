@@ -7,6 +7,8 @@ const db = require('./database/models')
 const app = express()
 const PORT = process.env.PORT || 8000
 const authRouter = require('./routes/auth.routes')
+const swaggerUI = require('swagger-ui-express')
+const swaggerDoc = require('./swagger.json')
 
 ///arriba
 /*
@@ -47,6 +49,7 @@ Routes
 //
 
 app.use('/api/v1/auth', authRouter)
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc))
 
 //
 
