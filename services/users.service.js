@@ -1,7 +1,14 @@
+const uuid = require('uuid')
+
 const models = require('../database/models')
 const { Op } = require('sequelize')
-const { CustomError } = require('../utils/custom-error')
+const classError = require('../utils/custom-error')
+const CustomError = new classError()
 const { hashPassword } = require('../utils/crypto')
+
+const rolesServices = require('../services/roles.service')
+const rolesSerivce = new rolesServices()
+
 class UsersService {
   constructor() {}
 
@@ -31,64 +38,68 @@ class UsersService {
     return users
   }
 
-  async createUser({ first_name, last_name, email, username, password }) {
+  async createUser({ first_name, last_name, email, username, password , country_id }) {
     const transaction = await models.sequelize.transaction()
+    const publicRole = await rolesSerivce.findRoleByName('public')
 
     try {
       let newUser = await models.Users.create(
         {
+          id: uuid.v4() ,
           first_name,
           last_name,
           email,
           username,
           password: hashPassword(password),
-        },
+        } ,
         { transaction }
       )
+      let newProfile = await models.Profiles.create({
+        id: uuid.v4() ,
+        user_id: newUser.id ,
+        role_id: publicRole.id ,
+        country_id
+      } , {transaction})
 
       await transaction.commit()
-      return newUser
+      return {newUser , newProfile}
     } catch (error) {
       await transaction.rollback()
       throw error
     }
   }
-  //Return Instance if we do not converted to json (or raw:true)
-  async getUserOr404(id) {
-    let user = await models.Users.findByPk(id)
-
-    if (!user) throw new CustomError('Not found User', 404, 'Not Found')
-
-    return user
-  }
 
   //Return not an Instance raw:true | we also can converted to Json instead
   async getUser(id) {
-    let user = await models.Users.findByPk(id, { raw: true })
-    return user
+    return await models.Users.findOne({
+      where: {
+        id
+      }
+    })
   }
 
-  async updateUser(id, { first_name, last_name, email, username }) {
+  async updateUser(id, { first_name, last_name, username }) {
     const transaction = await models.sequelize.transaction()
 
     try {
       let user = await models.Users.findByPk(id)
 
-      if (!user) throw new CustomError('Not found user', 404, 'Not Found')
+      if (user) {
+        let updatedUser = await user.update(
+          {
+            first_name,
+            last_name,
+            username,
+          },
+          { transaction })
+        await transaction.commit()
+    
+        return updatedUser
+        
+      } else {
+        return null
+      }
 
-      let updatedUser = await user.update(
-        {
-          first_name,
-          last_name,
-          email,
-          username,
-        },
-        { transaction }
-      )
-
-      await transaction.commit()
-
-      return updatedUser
     } catch (error) {
       await transaction.rollback()
       throw error
@@ -99,8 +110,6 @@ class UsersService {
     const transaction = await models.sequelize.transaction()
     try {
       let user = await models.Users.findByPk(id)
-
-      if (!user) throw new CustomError('Not found user', 404, 'Not Found')
 
       await user.destroy({ transaction })
 
@@ -113,7 +122,7 @@ class UsersService {
     }
   }
   async findUserByEmail(email) {
-    return await models.Users.findOne({
+    return await models.Users.scope('admin').findOne({
       where: {
         email,
       },
@@ -122,7 +131,7 @@ class UsersService {
 
   // For seeders <-----------
   async findUserByUserName(username) {
-    return await models.Users.findOne({
+    return await models.Users.scope('admin').findOne({
       where: {
         username
       }
@@ -130,7 +139,7 @@ class UsersService {
   }
 
   async findUsersByLastName(last_name) {
-    return await models.Users.findAll({
+    return await models.Users.scope('admin').findAll({
       where: {
         last_name
       }

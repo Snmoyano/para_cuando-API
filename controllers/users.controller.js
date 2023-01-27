@@ -25,7 +25,15 @@ const addUser = async (request, response, next) => {
     let { body } = request
     let user = await usersService.createUser(body)
     if (user) {
-      return response.status(201).json({ results: user })
+      return response.status(201).json({ 
+        message: 'User successfully created' ,
+        User: {
+          first_name: user.newUser.first_name ,
+          last_name: user.newUser.last_name ,
+          username: user.newUser.username ,
+          email: user.newUser.email
+        }
+      })
     }
   } catch (error) {
     next(
@@ -37,6 +45,7 @@ const addUser = async (request, response, next) => {
           email: 'example@example.com',
           username: 'String',
           password: 'String',
+          country_id: 'uuid'
         },
       })
     )
@@ -44,21 +53,47 @@ const addUser = async (request, response, next) => {
 }
 
 const getUser = async (request, response, next) => {
-  try {
-    let { id } = request.params
-    let users = await usersService.getUserOr404(id)
-    return response.json({ results: users })
-  } catch (error) {
-    next(error)
-  }
+  const id  = request.params.user_id
+  
+  usersService.getUser(id)
+    .then(data => {
+      if (data) {
+        response.status(200).json(data)
+      } else {
+        response.status(404).json({message: 'Invalid ID'})
+      }
+    })
+    .catch(err => {
+      next(err)
+    })
 }
 
 const updateUser = async (request, response, next) => {
   try {
-    let { id } = request.params
-    let { body } = request
-    let user = await usersService.updateUser(id, body)
-    return response.json({ results: user })
+    const id = request.params.user_id
+    const altId = request.user.id
+    if (id === altId) {
+      let { first_name , last_name , username} = request.body
+      if (first_name && last_name && username) {
+        let user = await usersService.updateUser(id,{first_name , last_name , username})
+        if (user) {
+          return response.status(200).json({ message: 'User updated' , results: user })
+        } else {
+          return response.status(404).json({message: 'Invalid ID'})
+        }
+      } else {
+        return response.json({
+          message: 'All fields must be filled' ,
+          fiels: {
+            first_name: 'String' ,
+            last_name: 'String' ,
+            username: 'String'
+          }
+        })
+      }
+    } else {
+      return response.status(401).json({message: 'Permission denied'})
+    }
   } catch (error) {
     next(error)
   }
@@ -66,9 +101,14 @@ const updateUser = async (request, response, next) => {
 
 const removeUser = async (request, response, next) => {
   try {
-    let { id } = request.params
-    let user = await usersService.removeUser(id)
-    return response.json({ results: user, message: 'removed' })
+    const id = request.params.user_id
+    const altId = request.user.id
+    if (id === altId) {
+      let user = await usersService.removeUser(id)
+      return response.status(200).json({ results: user, message: 'removed' })
+    } else {
+      return response.status(401).json({message: 'Permission denied'})
+    }
   } catch (error) {
     next(error)
   }

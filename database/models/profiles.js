@@ -1,4 +1,6 @@
 'use strict'
+const models = require('../models')
+
 const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class Profiles extends Model {
@@ -9,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Profiles.belongsTo(models.Users, { foreignKey: 'user_id' })
+      Profiles.belongsTo(models.Users, { as: 'User' , foreignKey: 'user_id' })
       Profiles.belongsTo(models.Roles, { foreignKey: 'role_id' })
       Profiles.belongsTo(models.Countries, { foreignKey: 'country_id' })
       Profiles.belongsToMany(models.Publications, {
@@ -76,6 +78,14 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'profiles',
       underscored: true,
       timestamps: true,
+      defaultScope: {
+        attributes: {
+          exclude: ['created_at' , 'updated_at' , 'user_id' , 'role_id' , 'country_id']
+        }
+      } ,
+      scopes: {
+        admin: {}
+      }
     }
   )
   return Profiles

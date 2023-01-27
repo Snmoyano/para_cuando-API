@@ -1,3 +1,4 @@
+const { request } = require('express')
 const ProfilesService = require('../services/profiles.service')
 const { getPagination, getPagingData } = require('../utils/sequelize-utils')
 
@@ -61,10 +62,23 @@ const removeProfile = async (request, response, next) => {
   }
 }
 
+const getOwnProfile = async(request , response , next) => {
+  const id = request.user.id
+  console.log(id)
+  try {
+    const profile = await profilesService.findOwnProfileByUserID(id)
+    return response.json(profile)
+  } catch (error) {
+    next(error)
+  }
+    
+}
+
 module.exports = {
   getProfiles,
   addProfile,
   getProfile,
   updateProfile,
   removeProfile,
+  getOwnProfile
 }
