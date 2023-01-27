@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
+
 const {
   getPublicationsTypes,
   addPublicationType,
@@ -9,9 +10,17 @@ const {
   removePublicationType,
 } = require('../controllers/publications_types.controller')
 
-router.get('/', getPublicationsTypes)
+
+
+
+router.get('/publications-types', getPublicationsTypes)
+
 router.post('/', addPublicationType)
+
+
+
 router.get('/:publication_type_id', getPublicationType)
+
 router.put('/:id', updatePublicationType)
 router.delete('/:id', removePublicationType)
 

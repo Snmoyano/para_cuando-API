@@ -9,7 +9,10 @@ const {
   removeCity,
 } = require('../controllers/cities.controller')
 
-router.get('/', getCities)
+
+
+router.get('/cities', getCities)
+
 router.post('/', addCity)
 router.get('/:id', getCity)
 router.put('/:id', updateCity)

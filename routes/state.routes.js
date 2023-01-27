@@ -9,7 +9,11 @@ const {
   removeState,
 } = require('../controllers/state.controller')
 
-router.get('/', getStates)
+
+
+
+router.get('/states', getStates)
+
 router.post('/', addState)
 router.get('/:id', getState)
 router.put('/:id', updateState)
