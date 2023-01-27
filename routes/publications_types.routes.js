@@ -12,12 +12,9 @@ const {
 
 
 
-
-router.get('/publications-types', getPublicationsTypes)
-
-router.post('/', addPublicationType)
-
-
+router.route('/')
+  .get(getPublicationsTypes)
+  .post(addPublicationType)
 
 router.get('/:publication_type_id', getPublicationType)
 

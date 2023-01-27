@@ -1,5 +1,7 @@
+const uuid = require('uuid')
+
 const models = require('../database/models')
-const { Op } = require('sequelize')
+const { Op, UUID } = require('sequelize')
 const { CustomError } = require('../utils/custom-error')
 
 class PublicationsTypesService {
@@ -37,7 +39,8 @@ class PublicationsTypesService {
     const transaction = await models.sequelize.transaction()
     try {
       let newPublicationType = await models.Publications_types.create(
-        {
+        { 
+          id: uuid.v4() ,
           name,
           description,
         },
@@ -54,9 +57,6 @@ class PublicationsTypesService {
   //Return Instance if we do not converted to json (or raw:true)
   async getPublicationTypeOr404(id) {
     let publicationType = await models.Publications_types.findByPk(id)
-
-    if (!publicationType)
-      throw new CustomError('Not found PublicationType', 404, 'Not Found')
 
     return publicationType
   }
