@@ -52,6 +52,7 @@ module.exports = {
           country_id: {
             type: Sequelize.UUID,
             foreignKey: true,
+            // allowNull: false ,
             references: {
               model: 'countries',
               key: 'id',

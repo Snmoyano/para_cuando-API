@@ -39,7 +39,6 @@ class PublicationsService {
   }
 
   async createPublication({
-    profile_id,
     publication_type_id,
     title,
     description,
