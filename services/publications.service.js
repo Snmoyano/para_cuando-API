@@ -144,14 +144,13 @@ class PublicationsService {
     try {
       let publication = await models.Publications.findByPk(id)
 
-      if (!publication)
-        throw new CustomError('Not found publication', 404, 'Not Found')
-
-      await publication.destroy({ transaction })
-
-      await transaction.commit()
-
-      return publication
+      if (publication) {
+        await publication.destroy({ transaction })
+        await transaction.commit()
+        return publication
+      } else {
+        return null
+      }
     } catch (error) {
       await transaction.rollback()
       throw error

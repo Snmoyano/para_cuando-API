@@ -16,10 +16,11 @@ const { addVote } = require('../controllers/votes.controller')
 router.route('/')
   .get(getPublications)
   .post(passportJWT.authenticate('jwt' , {session:false}) , addPublication)
-  
-router.get('/:publication_id', getPublication)
-router.post('/:publication_id/vote', addVote)
-// router.put('/:id', updatePublication)
-router.delete('/:publication_id', removePublication)
+
+router.route('/:publication_id')
+  .get(getPublication)
+  .delete(passportJWT.authenticate('jwt' , {session:false}) , removePublication)
+
+router.post('/:publication_id/vote', passportJWT.authenticate('jwt' , {session:false}) , addVote)
 
 module.exports = router

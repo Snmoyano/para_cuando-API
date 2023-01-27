@@ -24,19 +24,16 @@ const getVotes = async (request, response, next) => {
 
 const addVote = async (request, response, next) => {
   try {
-    let { body } = request
-    let vote = await votesService.createVote(body)
-    return response.status(201).json({ results: vote })
+    const user_id = request.user.id
+    const publication_id = request.params.publication_id
+    let vote = await votesService.createOrRemoveVote({user_id , publication_id})
+    if (vote !== 1) {
+      return response.status(201).json({ results: vote })
+    } else {
+      return response.status(200).json({message: `Vote from user:${request.user.username}, deleted`})
+    }
   } catch (error) {
-    next(
-      response.status(400).json({
-        message: error.message,
-        fields: {
-          publication_id: 'String',
-          profile_id: 'String',
-        },
-      })
-    )
+    next(error)
   }
 }
 
