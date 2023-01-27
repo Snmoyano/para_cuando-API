@@ -44,7 +44,11 @@ const getPublicationType = async (request, response, next) => {
   try {
     let {publication_type_id}  = request.params
     let publicationType = await publicationsTypesService.getPublicationType(publication_type_id)
-    return response.json({ results: publicationType })
+    if (publicationType) {
+      return response.status(200).json({ results: publicationType })
+    } else {
+      return response.status(404).json({message: 'Invalid ID'})
+    }
   } catch (error) {
     next(error)
   }

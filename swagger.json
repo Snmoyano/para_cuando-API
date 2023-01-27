@@ -29,29 +29,21 @@
       }
     ],
     "paths": {
-      "/publications-types": {
+      "/publications_types": {
         "get": {
           "tags": [
-            "publications-types"
+            "publications_types"
           ],
           "summary": "Get all types",
           "description": "Get all publications types",
-          "parameters": [
-            {
-              "name": "publicationId",
-              "in": "query",
-              "required": false,
-              "explode": true
-              
-            }
-          ],
           "responses": {
             "200": {
               "description": "successful operation",
               "content": {
                 "application/json": {
                   "schema": {
-                    "type": "array"
+                    "type": "array" ,
+                    "$ref": "#/components/schemas/publications_types"
                   }
                 }
               }
@@ -62,20 +54,18 @@
           }
         }
       },
-      "/publications-types/:publication_type_id": {
+      "/publications_types/{publication_type_id}": {
         "get": {
           "tags": [
-            "publicationsById"
+            "publications_types"
           ],
-          "summary": "Find a publication by ID",
+          "summary": "Find a publication by its ID",
           "description": "Returns a single publication",
           "operationId": "getPublicationType",
           "parameters": [
             {
-              "name": "publicationId",
-              "in": "publicationID",
-              "description": "ID of publication to return"
-          
+              "name": "publication_type_id" ,
+              "in": "path"
             }
           ],
           "responses": {
@@ -84,12 +74,12 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/publicationsById"
+                    "$ref": "#/components/schemas/publications_types"
                   }
                 },
                 "application/xml": {
                   "schema": {
-                    "$ref": "#/components/schemas/publicationsById"
+                    "$ref": "#/components/schemas/publications_types"
                   }
                 }
               }
@@ -98,7 +88,7 @@
               "description": "Invalid ID supplied"
             },
             "404": {
-              "description": "Publication not found"
+              "description": "Publication type not found"
             }
           }
         }
@@ -108,7 +98,7 @@
           "tags": [
             "publications"
           ],
-          "summary": "Returns publication",
+          "summary": "Returns all publications",
           "description": "Returns a list of all publications",
           "operationId": "getPublications",
           "responses": {
@@ -117,7 +107,8 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "type": "object"
+                    "type": "object",
+                    "$ref": "#/components/schemas/publications"
                   }
                 }
               }
@@ -129,8 +120,8 @@
             "publications"
           ],
           "summary": "Post a new publication",
-          "description": "Place a new publication",
-          "operationId": "ddPublication",
+          "description": "Place a new publication, only avaliable for registered users",
+          "operationId": "addPublication",
           "requestBody": {
             "content": {
               "application/json": {
@@ -167,21 +158,19 @@
           }
         }
       },
-      "/publications/publication_id": {
+      "/publications/{publication_id}": {
         "get": {
           "tags": [
-            "publicationByID"
+            "publications"
           ],
           "summary": "Find a publication by ID",
-          "description": "Get a publication by the ID",
+          "description": "Get a publication by its ID",
           "operationId": "getPublication",
           "parameters": [
             {
-              "name": "publicationId",
-              "in": "query",
-              "required": false,
-              "explode": true
-              
+              "name": "publication_id",
+              "in": "path",
+              "required": true 
             }
           ],
           "responses": {
@@ -190,7 +179,8 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "type": "array"
+                    "type": "object" ,
+                    "$ref": "#/components/schemas/publications"
                   }
                 }
               }
@@ -458,16 +448,24 @@
           "type": "object",
           "properties": {
             "id": {
-              "type": "SERIAL BIGINT"
+              "type": "varchar" ,
+              "format": "uuid" ,
+              "example": "469379a3-d3c6-4e8a-bf36-19c35890930a"
             },
             "profile_id": {
-              "type": "uuid"
+              "type": "varchar" ,
+              "format": "uuid" ,
+              "example": "469379a3-d3c6-4e8a-bf36-19c35890930a"
             },
             "publication_type_id": {
-              "type": "interger"
+              "type": "varchar" ,
+              "format": "uuid" ,
+              "example": "469379a3-d3c6-4e8a-bf36-19c35890930a"
             },
             "city_id": {
-              "type": "varchar"
+              "type": "varchar" ,
+              "format": "uuid" ,
+              "example": "469379a3-d3c6-4e8a-bf36-19c35890930a"
             },
             "title": {
               "type": "varchar"
@@ -482,7 +480,8 @@
               "type": "varchar"
             },
             "image_url ": {
-              "type": "varchar"
+              "type": "varchar" ,
+              "format": "url"
             }
           }
         },
@@ -490,13 +489,17 @@
           "type": "object",
           "properties": {
             "id": {
-              "type": "serial"
+              "type": "varchar" ,
+              "format": "uuid" ,
+              "example": "469379a3-d3c6-4e8a-bf36-19c35890930a"
             },
             "name": {
-              "type": "varchar"
+              "type": "varchar" ,
+              "example": "concert"
             },
             "description": {
-              "type": "varchar"
+              "type": "varchar" ,
+              "example": "Musical event which brings bands and artists to the stage!"
             }
           }
         }
