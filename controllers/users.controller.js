@@ -1,7 +1,11 @@
-const UsersService = require('../services/users.service')
 const { getPagination, getPagingData } = require('../utils/sequelize-utils')
 
+const UsersService = require('../services/users.service')
 const usersService = new UsersService()
+const profilesServices = require('../services/profiles.service')
+const profilesService = new profilesServices()
+const rolesServices = require('../services/roles.service')
+const rolesService = new rolesServices()
 
 const getUsers = async (request, response, next) => {
   try {
@@ -103,7 +107,24 @@ const removeUser = async (request, response, next) => {
   try {
     const id = request.params.user_id
     const altId = request.user.id
-    if (id === altId) {
+    // Admins can delete any user
+    const profiles = await profilesService.findOwnProfileByUserID(altId)
+    const roleAdmin = await rolesService.findRoleByName('admin')
+    let isAdmin = false
+    // console.log(profiles)
+    for (let profile of profiles) {
+      if (profile.role_id === roleAdmin.id) {
+        isAdmin = true
+      }
+    }
+    if (isAdmin) {
+      let user = await usersService.removeUser(id)
+      if (user) {
+        return response.status(200).json({ results: user, message: 'removed' })        
+      } else {
+        return response.status(404).json({message: 'Invalid ID'})
+      }
+    } else if (id === altId) {
       let user = await usersService.removeUser(id)
       return response.status(200).json({ results: user, message: 'removed' })
     } else {

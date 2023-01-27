@@ -74,6 +74,9 @@ class UsersService {
     return await models.Users.findOne({
       where: {
         id
+      } ,
+      attributes: {
+        exclude: ['email']
       }
     })
   }
@@ -111,11 +114,15 @@ class UsersService {
     try {
       let user = await models.Users.findByPk(id)
 
-      await user.destroy({ transaction })
+      if (user) {
+        await user.destroy({ transaction })
+        await transaction.commit()
+  
+        return user
+      } else {
+        return null
+      }
 
-      await transaction.commit()
-
-      return user
     } catch (error) {
       await transaction.rollback()
       throw error
