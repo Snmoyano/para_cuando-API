@@ -13,13 +13,18 @@ module.exports = (sequelize, DataTypes) => {
         as: 'publication',
         through: models.Votes,
         uniqueKey: false,
-        foreignKey: 'profile_id'
+        foreignKey: 'profile_id',
       })
       Publications.belongsTo(models.Profiles, { foreignKey: 'profile_id' })
       Publications.belongsTo(models.Publications_types, {
         foreignKey: 'publication_type_id',
       })
       Publications.belongsTo(models.Cities, { foreignKey: 'city_id' })
+      Publications.belongsToMany(models.Tags, {
+        as: 'tags',
+        through: models.PublicationsTags,
+        foreignKey: 'publication_id',
+      })
     }
   }
   Publications.init(
@@ -83,8 +88,8 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          isUrl: true
-        }
+          isUrl: true,
+        },
       },
     },
     {

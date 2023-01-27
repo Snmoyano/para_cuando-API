@@ -71,12 +71,6 @@ const removeVote = async (request, response, next) => {
   }
 }
 
-const publicationByVote = async (request, response, next) => {
-  const publicationId = request.publication_id
-  const { voteId } = request.params
-  const aux = await publicationsService.createPublication
-}
-
 module.exports = {
   getVotes,
   addVote,

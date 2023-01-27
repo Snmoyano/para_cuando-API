@@ -3,16 +3,16 @@ const router = express.Router()
 
 const {
   getStates,
-  addState,
-  getState,
-  updateState,
-  removeState,
+  // addState,
+  // getState,
+  // updateState,
+  // removeState,
 } = require('../controllers/state.controller')
 
 router.get('/', getStates)
-router.post('/', addState)
-router.get('/:id', getState)
-router.put('/:id', updateState)
-router.delete('/:id', removeState)
+// router.post('/', addState)
+// router.get('/:id', getState)
+// router.put('/:id', updateState)
+// router.delete('/:id', removeState)
 
 module.exports = router
