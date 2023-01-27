@@ -68,7 +68,7 @@ const getUser = async (request, response, next) => {
       }
     })
     .catch(err => {
-      next(err)
+      next(response.status(400).json({message: err.message}))
     })
 }
 

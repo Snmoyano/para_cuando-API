@@ -81,7 +81,7 @@ class PublicationsService {
   }
   //Return Instance if we do not converted to json (or raw:true)
   async getPublicationOr404(id) {
-    let publication = await models.Publications.findByPk(id , {
+    const publication = await models.Publications.findOne({where: {id}} , {
       include: [
         {
           model: models.Profiles ,
@@ -102,7 +102,7 @@ class PublicationsService {
         }
       ]
     })
-
+    
     return publication
   }
 

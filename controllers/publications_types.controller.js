@@ -50,7 +50,7 @@ const getPublicationType = async (request, response, next) => {
       return response.status(404).json({message: 'Invalid ID'})
     }
   } catch (error) {
-    next(error)
+    next(response.status(400).json({message: error.message}))
   }
 }
 
