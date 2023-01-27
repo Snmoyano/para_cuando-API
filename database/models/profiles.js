@@ -80,7 +80,7 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: true,
       defaultScope: {
         attributes: {
-          exclude: ['created_at' , 'updated_at' , 'user_id' , 'role_id' , 'country_id']
+          exclude: ['created_at' , 'updated_at' , 'user_id' , 'country_id']
         }
       } ,
       scopes: {

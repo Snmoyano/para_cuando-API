@@ -128,7 +128,7 @@ class ProfilesService {
   }
 
   async findOwnProfileByUserID(user_id) {
-    return await models.Profiles.findOne({
+    return await models.Profiles.findAll({
       where: {
         user_id
       } ,

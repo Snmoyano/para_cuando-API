@@ -23,7 +23,8 @@ const getPublications = async (request, response, next) => {
 const addPublication = async (request, response, next) => {
   try {
     let { body } = request
-    let publication = await publicationsService.createPublication(body)
+    const userId = request.user.id
+    let publication = await publicationsService.createPublication(body , userId)
     return response.status(201).json({ results: publication })
   } catch (error) {
     next(
@@ -46,9 +47,13 @@ const addPublication = async (request, response, next) => {
 
 const getPublication = async (request, response, next) => {
   try {
-    let { id } = request.params
-    let publication = await publicationsService.getPublicationOr404(id)
-    return response.json({ results: publication })
+    let { publication_id } = request.params
+    let publication = await publicationsService.getPublicationOr404(publication_id)
+    if (publication) {
+      return response.status(200).json({ results: publication })
+    } else {
+      return response.status(404).json({message: 'Invalid ID'})
+    }
   } catch (error) {
     next(error)
   }

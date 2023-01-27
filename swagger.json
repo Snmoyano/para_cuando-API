@@ -340,22 +340,34 @@
           "type": "object",
           "properties": {
             "id": {
-              "type": "uuid"
+              "type": "uuid" ,
+              "format": "uuid" ,
+              "example": "469379a3-d3c6-4e8a-bf36-19c35890930a"
             },
             "first_name": {
-              "type": "varchar"
+              "type": "varchar" ,
+              "format" : "int64" ,
+              "example": "Alcibíades"
             },
             "last_name": {
-              "type": "varchar"
+              "type": "varchar" ,
+              "format" : "int64" ,
+              "example": "Pérez"
             },
             "email": {
-              "type": "varchar"
+              "type": "varchar" ,
+              "format": "email" ,
+              "example": "email@example.com"
             },
             "username": {
-              "type": "varchar"
+              "type": "varchar" ,
+              "format" : "int64" ,
+              "example": "APerez2023"
             },
             "password": {
-              "type": "varchar"
+              "type": "varchar" ,
+              "format" : "password" ,
+              "example": "password"
             },
             "email_verified": {
               "type": "datetime"

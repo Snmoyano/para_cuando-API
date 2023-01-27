@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 
+const passportJWT = require('../middlewares/auth.middleware')
+
 const {
   getPublications,
   addPublication,
@@ -11,9 +13,10 @@ const {
 
 const { addVote } = require('../controllers/votes.controller')
 
-router.get('/publications', getPublications)
-
-router.post('/publications', addPublication)
+router.route('/')
+  .get(getPublications)
+  .post(passportJWT.authenticate('jwt' , {session:false}) , addPublication)
+  
 router.get('/:publication_id', getPublication)
 router.post('/:publication_id/vote', addVote)
 // router.put('/:id', updatePublication)
