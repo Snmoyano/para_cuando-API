@@ -25,7 +25,15 @@ const addUser = async (request, response, next) => {
     let { body } = request
     let user = await usersService.createUser(body)
     if (user) {
-      return response.status(201).json({ results: user })
+      return response.status(201).json({ 
+        message: 'User successfully created' ,
+        User: {
+          first_name: user.newUser.first_name ,
+          last_name: user.newUser.last_name ,
+          username: user.newUser.username ,
+          email: user.newUser.email
+        }
+      })
     }
   } catch (error) {
     next(
@@ -37,6 +45,7 @@ const addUser = async (request, response, next) => {
           email: 'example@example.com',
           username: 'String',
           password: 'String',
+          country_id: 'uuid'
         },
       })
     )

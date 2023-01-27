@@ -1,7 +1,13 @@
+const uuid = require('uuid')
+
 const models = require('../database/models')
 const { Op } = require('sequelize')
 const { CustomError } = require('../utils/custom-error')
 const { hashPassword } = require('../utils/crypto')
+
+const rolesServices = require('../services/roles.service')
+const rolesSerivce = new rolesServices()
+
 class UsersService {
   constructor() {}
 
@@ -31,23 +37,31 @@ class UsersService {
     return users
   }
 
-  async createUser({ first_name, last_name, email, username, password }) {
+  async createUser({ first_name, last_name, email, username, password , country_id }) {
     const transaction = await models.sequelize.transaction()
+    const publicRole = await rolesSerivce.findRoleByName('public')
 
     try {
       let newUser = await models.Users.create(
         {
+          id: uuid.v4() ,
           first_name,
           last_name,
           email,
           username,
           password: hashPassword(password),
-        },
+        } ,
         { transaction }
       )
+      let newProfile = await models.Profiles.create({
+        id: uuid.v4() ,
+        user_id: newUser.id ,
+        role_id: publicRole.id ,
+        country_id
+      } , {transaction})
 
       await transaction.commit()
-      return newUser
+      return {newUser , newProfile}
     } catch (error) {
       await transaction.rollback()
       throw error

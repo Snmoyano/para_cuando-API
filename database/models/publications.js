@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       Publications.belongsTo(models.Cities, { foreignKey: 'city_id' })
       Publications.belongsToMany(models.Tags, {
         as: 'tags',
-        through: models.PublicationsTags,
+        through: 'Publications_tags',
         foreignKey: 'publication_id',
       })
     }
