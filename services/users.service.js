@@ -92,9 +92,9 @@ class UsersService {
             username,
           },
           { transaction })
-          await transaction.commit()
+        await transaction.commit()
     
-          return updatedUser
+        return updatedUser
         
       } else {
         return null
@@ -110,8 +110,6 @@ class UsersService {
     const transaction = await models.sequelize.transaction()
     try {
       let user = await models.Users.findByPk(id)
-
-      if (!user) throw new CustomError('Not found user', 404, 'Not Found')
 
       await user.destroy({ transaction })
 

@@ -144,7 +144,7 @@ class ProfilesService {
   // For middlewares <---------
   async verifyAdmin(user_id) {
     try {
-      const profiles = await models.Profiles.findAll({
+      const profiles = await models.Profiles.scope('admin').findAll({
         where: {
           user_id
         }

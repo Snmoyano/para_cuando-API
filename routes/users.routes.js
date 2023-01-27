@@ -30,7 +30,7 @@ router.get('/user-info' , passportJWT.authenticate('jwt' , {session:false}) , ge
 router.route('/:user_id')
   .get(getUser)
   .put(passportJWT.authenticate('jwt' , {session: false}) , updateUser)
-  .delete(removeUser)
+  .delete(passportJWT.authenticate('jwt' , {session: false}) , removeUser)
 
 router.get('/users', getUser)
 

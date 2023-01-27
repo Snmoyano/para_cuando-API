@@ -19,7 +19,7 @@ passport.use(
     //? done(error, decoded)
     try {
       const response = await UsersService.getUser(decoded.id)
-      console.log(response)
+      // console.log(response)
       if (response) {
         return done(null, decoded) // No existe un error, pero si existe usuario
       }

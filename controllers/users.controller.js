@@ -70,7 +70,7 @@ const getUser = async (request, response, next) => {
 
 const updateUser = async (request, response, next) => {
   try {
-    let id = request.params.user_id
+    const id = request.params.user_id
     const altId = request.user.id
     if (id === altId) {
       let { first_name , last_name , username} = request.body
@@ -92,7 +92,7 @@ const updateUser = async (request, response, next) => {
         })
       }
     } else {
-      return response.status(400).json({message: 'Permission denied'})
+      return response.status(401).json({message: 'Permission denied'})
     }
   } catch (error) {
     next(error)
@@ -101,9 +101,14 @@ const updateUser = async (request, response, next) => {
 
 const removeUser = async (request, response, next) => {
   try {
-    let { id } = request.params
-    let user = await usersService.removeUser(id)
-    return response.json({ results: user, message: 'removed' })
+    const id = request.params.user_id
+    const altId = request.user.id
+    if (id === altId) {
+      let user = await usersService.removeUser(id)
+      return response.status(200).json({ results: user, message: 'removed' })
+    } else {
+      return response.status(401).json({message: 'Permission denied'})
+    }
   } catch (error) {
     next(error)
   }

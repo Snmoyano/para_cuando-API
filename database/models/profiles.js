@@ -82,6 +82,9 @@ module.exports = (sequelize, DataTypes) => {
         attributes: {
           exclude: ['created_at' , 'updated_at' , 'user_id' , 'role_id' , 'country_id']
         }
+      } ,
+      scopes: {
+        admin: {}
       }
     }
   )
