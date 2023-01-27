@@ -23,7 +23,8 @@ const getPublications = async (request, response, next) => {
 const addPublication = async (request, response, next) => {
   try {
     let { body } = request
-    let publication = await publicationsService.createPublication(body)
+    const userId = request.user.id
+    let publication = await publicationsService.createPublication(body , userId)
     return response.status(201).json({ results: publication })
   } catch (error) {
     next(
@@ -46,9 +47,13 @@ const addPublication = async (request, response, next) => {
 
 const getPublication = async (request, response, next) => {
   try {
-    let { id } = request.params
-    let publication = await publicationsService.getPublicationOr404(id)
-    return response.json({ results: publication })
+    let { publication_id } = request.params
+    let publication = await publicationsService.getPublicationOr404(publication_id)
+    if (publication) {
+      return response.status(200).json({ results: publication })
+    } else {
+      return response.status(404).json({message: 'Invalid ID'})
+    }
   } catch (error) {
     next(error)
   }
@@ -67,9 +72,20 @@ const updatePublication = async (request, response, next) => {
 
 const removePublication = async (request, response, next) => {
   try {
-    let { id } = request.params
-    let publication = await publicationsService.removePublication(id)
-    return response.json({ results: publication, message: 'removed' })
+    let { publication_id } = request.params
+    const user_id = request.user.id
+    const pub = await publicationsService.getPublicationOr404(publication_id)
+    // console.log(pub.Profile.User.id)
+    if (pub) {
+      if (user_id === pub.Profile.User.id) {
+        let publication = await publicationsService.removePublication(publication_id)
+        return response.status(200).json({ results: publication, message: 'removed' })
+      } else {
+        return response.status(401).json({message: 'Permission denied , only the creator of the publication can delete it'})
+      }
+    } else {
+      return response.status(404).json({message: 'Invalid ID'})
+    }
   } catch (error) {
     next(error)
   }

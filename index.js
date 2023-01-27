@@ -49,7 +49,7 @@ Routes
 //
 
 app.use('/api/v1/auth', authRouter)
-app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc))
+app.use('/api/v1/docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc))
 
 //
 

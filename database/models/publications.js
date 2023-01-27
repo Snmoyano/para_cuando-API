@@ -97,7 +97,12 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'Publications',
       tableName: 'publications',
       underscored: true,
-      timestamps: true,
+      timestamps: true ,
+      defaultScope: {
+        attributes: {
+          exclude: ['profile_id' , 'publication_type_id' , 'city_id']
+        }
+      }
     }
   )
   return Publications

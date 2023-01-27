@@ -13,8 +13,8 @@ const postLogin = (req, res) => {
           const token = jwt.sign({
             id: data.id ,
             email: data.email ,
-            userName: data.userName 
-          } , key , {expiresIn: '1h'})
+            username: data.username 
+          } , key , {expiresIn: '2h'})
           res.status(200).json({
             message: 'Right credentials' ,
             token

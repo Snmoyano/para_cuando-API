@@ -1,6 +1,13 @@
+const uuid = require('uuid')
+
 const models = require('../database/models')
 const { Op } = require('sequelize')
 const { CustomError } = require('../utils/custom-error')
+
+const profileServices = require('../services/profiles.service')
+const profileService = new profileServices()
+const rolesServices = require('../services/roles.service')
+const rolesService = new rolesServices()
 
 class VotesService {
   constructor() {}
@@ -37,19 +44,46 @@ class VotesService {
     return votes
   }
 
-  async createVote({ publication_id, profile_id }) {
+  async createOrRemoveVote({ publication_id, user_id }) {
     const transaction = await models.sequelize.transaction()
+    const profiles = await profileService.findOwnProfileByUserID(user_id)
+    const publicRole = await rolesService.findRoleByName('public')
+    let profile = undefined
     try {
-      let newVote = await models.Votes.create(
-        {
-          publication_id,
-          profile_id,
-        },
-        { transaction }
-      )
+      for (let prof of profiles) {
+        if (prof.role_id === publicRole.id) {
+          profile = prof
+        }
+      }
+      const isThereVotes = await models.Votes.findOne({
+        where: {
+          profile_id: profile.id
+        }
+      })
 
-      await transaction.commit()
-      return newVote
+      if (!isThereVotes) {
+        let newVote = await models.Votes.create(
+          {
+            id: uuid.v4() ,
+            publication_id,
+            profile_id: profile.id
+          },
+          { transaction }
+        )
+
+        await transaction.commit()
+        return newVote
+      } else if (isThereVotes) {
+        const newVote = await models.Votes.destroy({
+          where: {
+            id : isThereVotes.id
+          }
+        } , {transaction})
+
+        await transaction.commit()
+        return newVote
+      }
+
     } catch (error) {
       await transaction.rollback()
       throw error

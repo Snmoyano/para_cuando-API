@@ -14,7 +14,7 @@ module.exports = {
           //   type: Sequelize.INTEGER,
           // },
           tag_id: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.UUID,
             foreignKey: true,
             allowNull: false,
             references: {
