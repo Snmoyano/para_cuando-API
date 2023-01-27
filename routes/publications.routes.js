@@ -9,8 +9,12 @@ const {
   removePublication,
 } = require('../controllers/publications.controller')
 
-router.get('/', getPublications)
-router.post('/', addPublication)
+
+
+
+router.get('/publications', getPublications)
+
+router.post('/publications', addPublication)
 router.get('/:publication_id', getPublication)
 router.get('/:publication_id/vote', getPublication)
 // router.put('/:id', updatePublication)
