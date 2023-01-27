@@ -127,6 +127,20 @@ class ProfilesService {
     }
   }
 
+  async findOwnProfileByUserID(user_id) {
+    return await models.Profiles.findOne({
+      where: {
+        user_id
+      } ,
+      include: [
+        {model: models.Users ,
+          as: 'User'} ,
+        {model: models.Countries ,
+          attributes: ['name']}
+      ]
+    })
+  }
+
   // For middlewares <---------
   async verifyAdmin(user_id) {
     try {

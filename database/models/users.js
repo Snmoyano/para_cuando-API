@@ -65,6 +65,9 @@ module.exports = (sequelize, DataTypes) => {
         attributes: {
           exclude: ['token' , 'email_verified' , 'password' , 'created_at' , 'updated_at']
         }
+      } ,
+      scopes: {
+        admin: {}
       }
     }
   )

@@ -127,7 +127,7 @@ class UsersService {
     }
   }
   async findUserByEmail(email) {
-    return await models.Users.findOne({
+    return await models.Users.scope('admin').findOne({
       where: {
         email,
       },
@@ -136,7 +136,7 @@ class UsersService {
 
   // For seeders <-----------
   async findUserByUserName(username) {
-    return await models.Users.findOne({
+    return await models.Users.scope('admin').findOne({
       where: {
         username
       }
@@ -144,7 +144,7 @@ class UsersService {
   }
 
   async findUsersByLastName(last_name) {
-    return await models.Users.findAll({
+    return await models.Users.scope('admin').findAll({
       where: {
         last_name
       }

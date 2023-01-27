@@ -1,4 +1,6 @@
 'use strict'
+const models = require('../models')
+
 const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class Profiles extends Model {
@@ -76,6 +78,11 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'profiles',
       underscored: true,
       timestamps: true,
+      defaultScope: {
+        attributes: {
+          exclude: ['created_at' , 'updated_at' , 'user_id' , 'role_id' , 'country_id']
+        }
+      }
     }
   )
   return Profiles
