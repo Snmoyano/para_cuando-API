@@ -11,7 +11,6 @@ module.exports = {
             type: Sequelize.UUID,
             primaryKey: true,
             allowNull: false,
-            defaultValue: Sequelize.UUIDV4,
           },
           profile_id: {
             type: Sequelize.UUID,

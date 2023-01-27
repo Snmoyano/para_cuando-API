@@ -47,7 +47,7 @@ const addPublication = async (request, response, next) => {
 
 const getPublication = async (request, response, next) => {
   try {
-    let { publication_id } = request.params
+    let publication_id  = request.params.publication_id
     let publication = await publicationsService.getPublicationOr404(publication_id)
     if (publication) {
       return response.status(200).json({ results: publication })
@@ -55,7 +55,7 @@ const getPublication = async (request, response, next) => {
       return response.status(404).json({message: 'Invalid ID'})
     }
   } catch (error) {
-    next(error)
+    next(response.status(400).json({message:error.message}))
   }
 }
 
