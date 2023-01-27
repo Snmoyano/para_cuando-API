@@ -78,27 +78,28 @@ class UsersService {
     })
   }
 
-  async updateUser(id, { first_name, last_name, email, username }) {
+  async updateUser(id, { first_name, last_name, username }) {
     const transaction = await models.sequelize.transaction()
 
     try {
       let user = await models.Users.findByPk(id)
 
-      if (!user) throw new CustomError('Not found user', 404, 'Not Found')
+      if (user) {
+        let updatedUser = await user.update(
+          {
+            first_name,
+            last_name,
+            username,
+          },
+          { transaction })
+          await transaction.commit()
+    
+          return updatedUser
+        
+      } else {
+        return null
+      }
 
-      let updatedUser = await user.update(
-        {
-          first_name,
-          last_name,
-          email,
-          username,
-        },
-        { transaction }
-      )
-
-      await transaction.commit()
-
-      return updatedUser
     } catch (error) {
       await transaction.rollback()
       throw error

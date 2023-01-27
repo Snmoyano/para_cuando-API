@@ -70,10 +70,30 @@ const getUser = async (request, response, next) => {
 
 const updateUser = async (request, response, next) => {
   try {
-    let { id } = request.params
-    let { body } = request
-    let user = await usersService.updateUser(id, body)
-    return response.json({ results: user })
+    let id = request.params.user_id
+    const altId = request.user.id
+    if (id === altId) {
+      let { first_name , last_name , username} = request.body
+      if (first_name && last_name && username) {
+        let user = await usersService.updateUser(id,{first_name , last_name , username})
+        if (user) {
+          return response.status(200).json({ message: 'User updated' , results: user })
+        } else {
+          return response.status(404).json({message: 'Invalid ID'})
+        }
+      } else {
+        return response.json({
+          message: 'All fields must be filled' ,
+          fiels: {
+            first_name: 'String' ,
+            last_name: 'String' ,
+            username: 'String'
+          }
+        })
+      }
+    } else {
+      return response.status(400).json({message: 'Permission denied'})
+    }
   } catch (error) {
     next(error)
   }

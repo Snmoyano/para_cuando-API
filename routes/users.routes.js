@@ -27,9 +27,10 @@ router
 
 router.get('/user-info' , passportJWT.authenticate('jwt' , {session:false}) , getOwnProfile)
 
-router.get('/:user_id', getUser)
-router.put('/:user_id', updateUser)
-router.delete('/:id', removeUser)
+router.route('/:user_id')
+  .get(getUser)
+  .put(passportJWT.authenticate('jwt' , {session: false}) , updateUser)
+  .delete(removeUser)
 
 router.get('/users', getUser)
 
