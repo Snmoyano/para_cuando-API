@@ -32,7 +32,7 @@ router.route('/:user_id')
   .put(passportJWT.authenticate('jwt' , {session: false}) , updateUser)
   .delete(passportJWT.authenticate('jwt' , {session: false}) , removeUser)
 
-router.get('/users', getUser)
+// router.get('/users', getUser)
 
 router.get('/:user_id/votes', getVotes)
 router.get('/:user_id/publications', getPublications)
