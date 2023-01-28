@@ -1,12 +1,12 @@
 const jwt = require('jsonwebtoken')
 const authServices = require('../services/auth.service')
 const mailer = require('../utils/mailer')
+const config = require('../database/config/config')
 
 const key = process.env.JWT_SECRET
 
 const postLogin = (req, res) => {
   const { email, password } = req.body
-
   if (email && password) {
     authServices
       .checkUsersCredentials(email, password)
@@ -51,11 +51,7 @@ const postRecoveryToken = (req, res) => {
           from: '<test.academlo@gmail.com>',
           to: email,
           subject: 'Recuperación de Contraseña',
-          html: `<a href='${'http://localhost:3000/'}/api/v1/auth/recovery-password/${
-            data.id
-          }'>${'http://localhost:3000/'}/api/v1/auth/recovery-password/${
-            data.id
-          }</a>`,
+          html: `<a href='${config.api.host}/api/v1/auth/recovery-password/${data.id}'>${config.api.host}/api/v1/auth/recovery-password/${data.id}</a>`,
         })
       }
       res.status(200).json({ message: 'Email sended!, Check your inbox' })
