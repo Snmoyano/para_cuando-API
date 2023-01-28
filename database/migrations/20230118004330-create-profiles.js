@@ -19,6 +19,7 @@ module.exports = {
           user_id: {
             type: Sequelize.UUID,
             foreignKey: true,
+            allowNull: false ,
             references: {
               model: 'users',
               key: 'id',
@@ -52,7 +53,7 @@ module.exports = {
           country_id: {
             type: Sequelize.UUID,
             foreignKey: true,
-            // allowNull: false ,
+            allowNull: false ,
             references: {
               model: 'countries',
               key: 'id',

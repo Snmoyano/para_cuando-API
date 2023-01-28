@@ -16,10 +16,9 @@ module.exports = {
       const admin = await usersService.findUserByUserName('mems2001')
       const admin2 = await usersService.findUserByUserName('pendingAdmin1')
       const admin3 = await usersService.findUserByUserName('pendingAdmin2')
-      const admin4 = await usersService.findUserByUserName('pendingAdmin3')
+      const admin4 = await usersService.findUserByUserName('snmoyano')
       const admin5 = await usersService.findUserByUserName('pendingAdmin4')
       const country = await countriesService.findCountryByName('Ecuador')
-      // console.log(country)
       const roleAdmin = await rolesService.findRoleByName('admin')
       const rolePublic = await rolesService.findRoleByName('public')
       const profiles = [

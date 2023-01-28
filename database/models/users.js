@@ -76,8 +76,8 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       scopes: {
-        admin: {},
-      },
+        admin: {}
+      }
     }
   )
   return Users
