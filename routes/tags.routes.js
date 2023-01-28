@@ -11,6 +11,6 @@ const {
 
 router.get('/', getTags)
 router.post('/', addTag)
-router.get('/:id', getTag)
-router.put('/:id', updateTag)
-router.delete('/:id', removeTag)
+router.get('/:tag_id', getTag)
+router.put('/:tag_id', updateTag)
+router.delete('/:tag_id', removeTag)

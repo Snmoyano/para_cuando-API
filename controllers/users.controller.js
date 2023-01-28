@@ -1,5 +1,5 @@
 const { getPagination, getPagingData } = require('../utils/sequelize-utils')
-
+const mailer = require('../utils/mailer')
 const UsersService = require('../services/users.service')
 const usersService = new UsersService()
 const profilesServices = require('../services/profiles.service')
@@ -28,15 +28,23 @@ const addUser = async (request, response, next) => {
   try {
     let { body } = request
     let user = await usersService.createUser(body)
+
     if (user) {
-      return response.status(201).json({ 
-        message: 'User successfully created' ,
+      await mailer.sendMail({
+        from: '<sergio.nicolas.moyano@gmail.com>',
+        to: user.newUser.email,
+        subject: `Bienvenido ${user.newUser.first_name}`,
+        html: `<h1>Bienvenido a nuestra app ${user.newUser.first_name}</h1> <a href="#" class="myButton">turquoise</a> `,
+        text: 'Que gusto verte !',
+      })
+      return response.status(201).json({
+        message: 'User successfully created',
         User: {
-          first_name: user.newUser.first_name ,
-          last_name: user.newUser.last_name ,
-          username: user.newUser.username ,
-          email: user.newUser.email
-        }
+          first_name: user.newUser.first_name,
+          last_name: user.newUser.last_name,
+          username: user.newUser.username,
+          email: user.newUser.email,
+        },
       })
     }
   } catch (error) {
@@ -49,7 +57,7 @@ const addUser = async (request, response, next) => {
           email: 'example@example.com',
           username: 'String',
           password: 'String',
-          country_id: 'uuid'
+          country_id: 'uuid',
         },
       })
     )
@@ -57,18 +65,19 @@ const addUser = async (request, response, next) => {
 }
 
 const getUser = async (request, response, next) => {
-  const id  = request.params.user_id
-  
-  usersService.getUser(id)
-    .then(data => {
+  const id = request.params.user_id
+
+  usersService
+    .getUser(id)
+    .then((data) => {
       if (data) {
         response.status(200).json(data)
       } else {
-        response.status(404).json({message: 'Invalid ID'})
+        response.status(404).json({ message: 'Invalid ID' })
       }
     })
-    .catch(err => {
-      next(response.status(400).json({message: err.message}))
+    .catch((err) => {
+      next(response.status(400).json({ message: err.message }))
     })
 }
 
@@ -77,26 +86,32 @@ const updateUser = async (request, response, next) => {
     const id = request.params.user_id
     const altId = request.user.id
     if (id === altId) {
-      let { first_name , last_name , username} = request.body
+      let { first_name, last_name, username } = request.body
       if (first_name && last_name && username) {
-        let user = await usersService.updateUser(id,{first_name , last_name , username})
+        let user = await usersService.updateUser(id, {
+          first_name,
+          last_name,
+          username,
+        })
         if (user) {
-          return response.status(200).json({ message: 'User updated' , results: user })
+          return response
+            .status(200)
+            .json({ message: 'User updated', results: user })
         } else {
-          return response.status(404).json({message: 'Invalid ID'})
+          return response.status(404).json({ message: 'Invalid ID' })
         }
       } else {
         return response.json({
-          message: 'All fields must be filled' ,
+          message: 'All fields must be filled',
           fiels: {
-            first_name: 'String' ,
-            last_name: 'String' ,
-            username: 'String'
-          }
+            first_name: 'String',
+            last_name: 'String',
+            username: 'String',
+          },
         })
       }
     } else {
-      return response.status(401).json({message: 'Permission denied'})
+      return response.status(401).json({ message: 'Permission denied' })
     }
   } catch (error) {
     next(error)
@@ -120,15 +135,15 @@ const removeUser = async (request, response, next) => {
     if (isAdmin) {
       let user = await usersService.removeUser(id)
       if (user) {
-        return response.status(200).json({ results: user, message: 'removed' })        
+        return response.status(200).json({ results: user, message: 'removed' })
       } else {
-        return response.status(404).json({message: 'Invalid ID'})
+        return response.status(404).json({ message: 'Invalid ID' })
       }
     } else if (id === altId) {
       let user = await usersService.removeUser(id)
       return response.status(200).json({ results: user, message: 'removed' })
     } else {
-      return response.status(401).json({message: 'Permission denied'})
+      return response.status(401).json({ message: 'Permission denied' })
     }
   } catch (error) {
     next(error)

@@ -13,6 +13,9 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'user_id',
         // targetKey: 'user_id',
       })
+      Users.belongsTo(models.RecoveryPassword, {
+        foreignKey: 'user_id',
+      })
     }
   }
   Users.init(
@@ -20,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       id: {
         allowNull: false,
         primaryKey: true,
-        type: DataTypes.UUID, 
+        type: DataTypes.UUID,
       },
       first_name: {
         type: DataTypes.STRING,
@@ -63,12 +66,18 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: true,
       defaultScope: {
         attributes: {
-          exclude: ['token' , 'email_verified' , 'password' , 'created_at' , 'updated_at']
-        }
-      } ,
+          exclude: [
+            'token',
+            'email_verified',
+            'password',
+            'created_at',
+            'updated_at',
+          ],
+        },
+      },
       scopes: {
-        admin: {}
-      }
+        admin: {},
+      },
     }
   )
   return Users
