@@ -439,7 +439,21 @@
             }
           }
         }
-      } 
+      } ,
+
+      "/auth/login": {
+        "post": {
+          "tags": [
+            "auth"
+        ] ,
+        "summary": "Log In" ,
+        "description": "Login service for registered users" ,
+        "operationId": "postLogin" ,
+        "requestBody": {
+          
+        }
+        }
+      }
     },
     
   
