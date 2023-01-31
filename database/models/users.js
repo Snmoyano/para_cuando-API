@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'user_id',
         // targetKey: 'user_id',
       })
-      Users.belongsTo(models.RecoveryPassword, {
+      Users.hasMany(models.RecoveryPassword, {
         foreignKey: 'user_id',
       })
     }

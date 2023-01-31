@@ -9,14 +9,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      RecoveryPassword.hasOne(models.Users, { foreignKey: 'user_id' })
+      RecoveryPassword.belongsTo(models.Users, { foreignKey: 'user_id' })
     }
   }
   RecoveryPassword.init(
     {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
         type: DataTypes.UUID,
       },
@@ -33,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       used: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false
       },
       createdAt: {
         allowNull: false,

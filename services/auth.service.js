@@ -25,6 +25,7 @@ const createRecoveryToken = async (email) => {
     })
     return data
   } catch (error) {
+    console.log(error)
     return null
   }
 }
@@ -44,7 +45,7 @@ const changePassword = async (tokenId, newPassword) => {
         },
       }
     )
-    const data = await userService.updateUser(recoveryData.user_id, {
+    const data = await userService.updateUserPassword(recoveryData.user_id, {
       password: hashPassword(newPassword),
     })
     return data
