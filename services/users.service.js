@@ -152,6 +152,33 @@ class UsersService {
       }
     })
   }
+
+  // For password recovery <------------
+  async updateUserPassword(userId , {password}) {
+    const transaction = await models.sequelize.transaction()
+
+    try {
+      let user = await models.Users.findByPk(userId)
+
+      if (user) {
+        let updatedUser = await user.update(
+          {
+            password
+          },
+          { transaction })
+        await transaction.commit()
+    
+        return updatedUser
+        
+      } else {
+        return null
+      }
+
+    } catch (error) {
+      await transaction.rollback()
+      throw error
+    }
+  }
 }
 
 module.exports = UsersService

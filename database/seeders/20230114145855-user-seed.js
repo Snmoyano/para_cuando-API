@@ -37,7 +37,7 @@ module.exports = {
         email_verified: new Date(),
       },
       {
-        id: uuid.v4(), // Waiting for Nicolás <--------------
+        id: uuid.v4(),
         first_name: 'Nicolás',
         last_name: 'Moyano',
         email: 'sergio.nicolas.moyano@gmail.com',
@@ -73,7 +73,7 @@ module.exports = {
       'mems2001',
       'pendingAdmin1',
       'pendingAdmin2',
-      'pendingAdmin3',
+      'snmoyano',
       'pendingAdmin4',
     ]
 

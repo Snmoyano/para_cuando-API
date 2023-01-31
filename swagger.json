@@ -54,6 +54,7 @@
           }
         }
       },
+
       "/publications_types/{publication_type_id}": {
         "get": {
           "tags": [
@@ -93,6 +94,7 @@
           }
         }
       },
+
       "/publications": {
         "get": {
           "tags": [
@@ -158,6 +160,7 @@
           }
         }
       },
+
       "/publications/{publication_id}": {
         "get": {
           "tags": [
@@ -194,6 +197,7 @@
           }
         }
       },
+
       "/users": {
         "post": {
           "tags": [
@@ -223,7 +227,7 @@
             }
           },
           "responses": {
-            "default": {
+            "201": {
               "description": "successful operation",
               "content": {
                 "application/json": {
@@ -241,6 +245,38 @@
           }
         }
       },
+
+      "/users/user-info": {
+        "get": {
+          "tags": [
+            "user"
+          ] ,
+          "summary": "Get profile info form user" ,
+          "description": "Gets profile info from the user logged, only for logged users" ,
+          "operationId": "getOwnProfile" ,
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "description": "Token generated when user logs in" ,
+              "required": true ,
+              "schema": {
+                "type": "string" ,
+                "format": "jwt"
+              }
+            }
+          ] ,
+          "responses": {
+            "200": {
+              "description": "successful operation" ,
+              "content": {
+
+              }
+            }
+          }
+        }
+      },
+
       "/users/{user_id}": {
         "get": {
           "tags": [
@@ -279,10 +315,49 @@
               "description": "User not found"
             }
           }
-        }
-      },
+        } ,
+        "put": {
+          "tags":[
+            "user"
+          ] ,
+          "summary": "Update user" ,
+          "description": "Update a user by its ID, only avaliable for the user owner and user must be logged" ,
+          "operationId" : "putUser" ,
+          "parameters": [
+            {
+              "name": "user_id" ,
+              "in": "path" ,
+              "required": true
+            }
+          ] ,
+          "responses": {
+            "200": {
+              "description": "successful operation" ,
+              "content": {
+                  "application/json": {
+                    "type": "object",
+                    "schema": {
+                      "$ref": "#/components/schemas/users"
+                    }
+                  },
+                  "application/xml": {
+                    "type": "object",
+                    "schema": {
+                      "$ref": "#/components/schemas/users"
+                    }
+                  }
+                }
+              }
+            }
+          } ,
+          "delete": {
+            "tags": [
+              "user"
+            ]
+          }
+        },
       
-      "/users/:user_id/publications": {
+      "/users/{user_id}/publications": {
         "get": {
           "tags": [
             "user"
@@ -322,8 +397,387 @@
             }
           }
         }
+      } ,
+
+      "/users/{user_id}/votes": {
+        "get": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Get user's votes by id",
+          "description": "",
+          "operationId": "getVotes",
+          "parameters": [
+            {
+              "name": "user_id",
+              "in": "user_id",
+              "description": "ID of publication to return"
+          
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/publicationsById"
+                  }
+                },
+                "application/xml": {
+                  "schema": {
+                    "$ref": "#/components/schemas/publicationsById"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid ID supplied"
+            },
+            "404": {
+              "description": "Publication not found"
+            }
+          }
+        }
+      } ,
+
+      "/auth/login": {
+        "post": {
+          "tags": [
+            "auth"
+          ] ,
+        "summary": "Log In" ,
+        "description": "Login service for registered users" ,
+        "operationId": "postLogin" ,
+        "requestBody": {
+          "description": "Login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object" ,
+                  "properties": {
+                    "email": {
+                      "type": "varchar" ,
+                      "format": "email" ,
+                      "example": "example@mail.com" ,
+                      "required": true
+                    } ,
+                    "password": {
+                      "type": "varchar" ,
+                      "format": "email" ,
+                      "example": "pass",
+                      "required": true
+                    }
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object" ,
+                  "properties": {
+                    "email": {
+                      "type": "varchar" ,
+                      "format": "email" ,
+                      "example": "example@mail.com" ,
+                      "required": true
+                    } ,
+                    "password": {
+                      "type": "varchar" ,
+                      "format": "email" ,
+                      "example": "pass",
+                      "required": true
+                    }
+                  }
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "type": "object" ,
+                  "properties": {
+                    "email": {
+                      "type": "varchar" ,
+                      "format": "email" ,
+                      "example": "example@mail.com" ,
+                      "required": true
+                    } ,
+                    "password": {
+                      "type": "varchar" ,
+                      "format": "email" ,
+                      "example": "pass",
+                      "required": true
+                    }
+                  }
+                }
+              }
+            }
+        } ,
+        "responses": {
+          "200": {
+            "description": "successful operation" ,
+            "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object" ,
+                    "properties": {
+                      "message": {
+                        "type": "varchar",
+                        "example": "Right credentials"
+                      },
+                      "token": {
+                        "type": "varchar",
+                        "format": "jwt",
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ2OGVlYWRiLTg4YjItNDk0Yy04NjlkLWYyZThmYTJhYTFjNCIsImVtYWlsIjoibWVtczIwMDFjb2RlQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoibWVtczIwMDEiLCJpYXQiOjE2NzUxNDA4MTQsImV4cCI6MTY3NTE0ODAxNH0.MfJz6ryjKrG20mxPNcFw0CumrFcCe1oTtm3XW5FKK5M"
+                      }
+                    }
+                  }
+                }              
+            }
+          } ,
+          "400": {
+            "description": "Password or email missing",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type": "object",
+                  "properties":{
+                    "message":{
+                      "type": "varchar",
+                      "example": "Email or password missing"
+                    }
+                  }
+                }
+              }
+            }
+          }, 
+          "401": {
+            "description": "Invalid credentials" ,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object" ,
+                  "properties":{
+                    "message": {
+                      "type": "varchar",
+                      "example": "Invalid credentials"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        }
+      },
+
+      "/auth/recovery-password":{
+        "post": {
+          "tags": [
+            "auth"
+          ],
+          "summary": "Password recovery",
+          "description": "Get a link for password recovery to the provided email",
+          "operationId": "postRecoveryToken",
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "varchar",
+                      "format": "email",
+                      "example": "example@mail.com",
+                      "required": true
+                    }
+                  }
+                }
+              },
+              "application/x-www-form-urlencoded":{
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "varchar",
+                      "format": "email",
+                      "example": "example@mail.com",
+                      "required": true
+                    }
+                  }
+                }
+              },
+              "application/xml":{
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "varchar",
+                      "format": "email",
+                      "example": "example@mail.com",
+                      "required": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description": "successful operation",
+              "content":{
+                "application/json":{
+                  "schema":{
+                    "type": "object",
+                    "properties":{
+                      "message":{
+                        "type": "varchar",
+                        "example": "Email sended!, Check your inbox"
+                      }
+                    }
+                  }
+                }
+              }
+            } ,
+            "400": {
+              "description": "Missing data, email must be provided",
+              "content":{
+                "application/json":{
+                  "schema":{
+                    "type": "object",
+                    "properties":{
+                      "message":{
+                        "type": "varchar",
+                        "example": "Missing data"
+                      },
+                      "fields": {
+                        "type": "object",
+                        "properties":{
+                          "email": {
+                            "type":"varchar",
+                            "format": "email",
+                            "example": "example@mail.com"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Email does not correspond to a registered user",
+              "content": {
+                "application/json": {
+                  "schema":{
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "varchar",
+                        "example": "Invalid email"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "/auth/recovery-password/{id}":{
+        "patch":{
+          "tags":["auth"],
+          "summary": "Patch user password",
+          "description": "Update user password",
+          "operationId": "patchPassword",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "description": "uuid",
+              "example": "469379a3-d3c6-4e8a-bf36-19c35890930a"
+            }
+          ],
+          "requestBody": {
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type": "object",
+                  "properties":{
+                    "password":{
+                      "type": "varchar",
+                      "format": "password",
+                      "example": "pass"
+                    }
+                  }
+                }
+              },
+              "application/xml":{
+                "schema":{
+                  "type": "object",
+                  "properties":{
+                    "password":{
+                      "type": "varchar",
+                      "format": "password",
+                      "example": "pass"
+                    }
+                  }
+                }
+              },
+              "application/x-www-form-urlencoded":{
+                "schema":{
+                  "type": "object",
+                  "properties":{
+                    "password":{
+                      "type": "varchar",
+                      "format": "password",
+                      "example": "pass"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description": "successful operation",
+              "content":{
+                "application/json":{
+                  "schema":{
+                    "type": "object",
+                    "properties":{
+                      "message":{
+                        "type":"varchar",
+                        "example": "Password sucessfully updated"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400":{
+              "description": "Url expired",
+              "content":{
+                "application/json":{
+                  "schema":{
+                    "type":"object",
+                    "properties":{
+                      "message":{
+                        "type": "varchar",
+                        "example": "Url expired"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
+
     },
+    
+  
     "components": {
       "schemas": {
         "users": {
@@ -506,34 +960,8 @@
 
       },
       "requestBodies": {
-        "users": {
-          "description": "User object that needs to be added to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/users"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/Pet"
-              }
-            }
-          }
-        },
-        "UserArray": {
-          "description": "List of user object",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          }
-        }
+        
       }
-  }
+    }
+  
 }

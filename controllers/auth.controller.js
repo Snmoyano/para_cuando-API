@@ -46,6 +46,7 @@ const postRecoveryToken = (req, res) => {
   const { email } = req.body
   if (email) {
     authServices.createRecoveryToken(email).then((data) => {
+      // console.log(data)
       if (data) {
         mailer.sendMail({
           from: '<test.academlo@gmail.com>',
@@ -53,12 +54,16 @@ const postRecoveryToken = (req, res) => {
           subject: 'Recuperación de Contraseña',
           html: `<a href='${config.api.host}/api/v1/auth/recovery-password/${data.id}'>${config.api.host}/api/v1/auth/recovery-password/${data.id}</a>`,
         })
+        res.status(200).json({ message: 'Email sended!, Check your inbox' })
+      } else {
+        res.status(404).json({
+          message: 'Invalid email'
+        })
       }
-      res.status(200).json({ message: 'Email sended!, Check your inbox' })
     })
   } else {
     res.status(400).json({
-      message: 'Invalid Data',
+      message: 'Missing Data',
       fields: { email: 'example@example.com' },
     })
   }

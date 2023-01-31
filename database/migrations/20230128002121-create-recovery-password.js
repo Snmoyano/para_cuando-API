@@ -25,6 +25,7 @@ module.exports = {
           },
           used: {
             type: Sequelize.BOOLEAN,
+            defaultValue: false
           },
           createdAt: {
             allowNull: false,

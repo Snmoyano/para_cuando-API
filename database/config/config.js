@@ -4,6 +4,7 @@ module.exports = {
   api: {
     jwtSecret: process.env.JWT_SECRET,
     mailPass: process.env.MAIL_PASS,
+    mail: process.env.MAIL,
     host: process.env.HOST || 'http://localhost:8000/',
   },
   development: {
