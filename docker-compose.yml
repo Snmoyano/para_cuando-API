@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+  
+  team_5_API:
+    build: .
+    image: team_5_API_image
+    container_name: team_5_API_container
+    ports:
+      - "8005:8005"
+    links:
+      - team_5_postgres_app
+    env_file:
+      - .env
+
+  team_5_postgres_app:
+    image: postgres
+    container_name: team_5_postgres_container
+    ports: 
+      - "5435:5432"
+    env_file:
+      - .env.db.docker
+    volumes:
+      - team_5_postgres:/var/lib/postgresql/data
+
+volumes:
+  team_5_postgres:
