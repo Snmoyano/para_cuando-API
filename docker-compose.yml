@@ -1,10 +1,10 @@
 version: "3.7"
 services:
   
-  team_5_API:
+  team_5_api:
     build: .
-    image: team_5_API_image
-    container_name: team_5_API_container
+    image: team_5_api_image
+    container_name: team_5_api_container
     ports:
       - "8005:8005"
     links:
