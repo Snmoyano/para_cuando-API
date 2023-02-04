@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 8000
 const authRouter = require('./routes/auth.routes')
 const swaggerUI = require('swagger-ui-express')
 const swaggerDoc = require('./swagger.json')
+const routerErrorHandler = require('./routes/errorhandler.router')
 
 ///arriba
 /*
@@ -65,6 +66,7 @@ app.get('/', ({ res }) => {
 })
 
 routerModels(app)
+routerErrorHandler(app)
 
 app.listen(PORT, () => {
   console.log(`Server on PORT: ${PORT}`)
